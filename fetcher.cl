@@ -11,7 +11,7 @@
 (defun process-http-addresses (input-file prefix output-file)
   "h7ta tkhdam had lh7abs"
   (with-open-file (in input-file :direction :input)
-    (with-open-file (out output-file :direction :output :if-exists :supersede)
+    (let ((loop_number 1))
       (loop for line = (read-line in nil)
             while line do
               (let* ((full-url (concatenate 'string prefix line))
@@ -20,7 +20,6 @@
                                  (error (e)
                                    (format t "Error fetching ~A: ~A~%" full-url e)
                                    nil)))
-                     (loop_number 1)
                      )
 
                 (when response
@@ -48,13 +47,12 @@
 
                     ;; why this worked and the format didn't ?
                     (when pdf_file
-                      (with-open-file (out (concatenate 'string output-file  "_" (format nil "~D" loop_number)  "_.pdf"))
+                      (with-open-file (out2 (format nil "~A_~D.pdf" output-file loop_number)
                         :direction :output
                         :if-exists :supersede
                         :if-does-not-exist :create
                         :element-type '(unsigned-byte 8))
-                      (write-sequence pdf_file out))
+                      (write-sequence pdf_file out2)))
 
-                    ;; (format t "~A"   pdf_link)
-                    (setq loop_number (+ loop_number 1))
+                    (setq loop_number (1+ loop_number))
                     )))))))
