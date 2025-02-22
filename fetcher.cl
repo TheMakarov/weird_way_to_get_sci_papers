@@ -4,7 +4,6 @@
 
 (defun find-title (html-string)
   (let*
-      ;;((index_first_title (search "this)\">" html-string )) (index_last_title (search "</div" html-string :start2 index_first_title)))
       ((index_first_title (search "i>" html-string )) (index_last_title (search "</i" html-string )))
 
     (if (equal index_first_title nil ) "not found" (subseq html-string (+ index_first_title 2) index_last_title) )
@@ -28,7 +27,7 @@
 
 
 (defun extract-urls (html-string)
-  "Extracts all URLs from location.href='...' patterns in HTML content"
+  "Extracts all URLs from location.href='...' patterns in HTML content somehow "
   (let
       ((matched-url (car (cl-ppcre:all-matches-as-strings
                           "location\\.href\\s*=\\s*['\"]([^'\"]+)['\"]"
@@ -42,9 +41,9 @@
     ))
 
 
-(defun process-http-addresses (input-file prefix output-path log-file)
-  "h7ta tkhdam had lh7abs"
-  ;; for some reason it's doesn't output it ?
+(defun process-http-addresses (&key input-file (prefix "https://sci-hub.se/")  (output-path "./") (log-file "./err.log") )
+  "main"
+  ;; for some reason it's doesn't output it ? yes yes yes it does !
   (with-open-file (out log-file
                        :direction :output
                        :if-exists :append
@@ -95,7 +94,6 @@
                                             nil)))
                               )
 
-                           (format t "title is => ~A ~%" pdf_title)
                            ;; why this worked and the format didn't ?
                            (when pdf_file
                              (with-open-file (out2 (format nil "~A~Apdf" output-path pdf_title)
