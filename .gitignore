@@ -17,3 +17,5 @@
 *.wx32fsl
 list.lst
 plan.md
+/output/*
+*.log*
